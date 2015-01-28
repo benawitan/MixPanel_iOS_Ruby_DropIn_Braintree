@@ -22,10 +22,15 @@
  - (void)initializeDefaultAlbums {
 
  [self addAlbumWithTitle:@"Infected Splinter" artist:@"Boppin' Beavers" summary:@"Awesome album with a hint of Oak." price:9.99f locationInStore:@"Section F"];
- [self addAlbumWithTitle:@"Hairy Eyeball" artist:@"Cyclops" summary:@"A 20/20 retrospective on Classic Rock." price:14.99f locationInStore:@"Discount Rack"];
+ [self addAlbumWithTitle:@"Hairy Eyeball" artist:@"Cyclops" summary:@"A 20/20 retrospective on Classic Rock." price:14.99f locationInStore:@"Section Discount"];
  [self addAlbumWithTitle:@"Squish" artist:@"the Bugz" summary:@"Not your average fly by night band." price:8.99f locationInStore:@"Section A"];
- [self addAlbumWithTitle:@"Acid Fog" artist:@"Josh and Chuck" summary:@"You should know this stuff." price:11.99f locationInStore:@"Section 9 3/4"];
-
+ [self addAlbumWithTitle:@"Acid Fog" artist:@"Josh and Chuck" summary:@"You should know this stuff." price:11.99f locationInStore:@"Section B"];
+ [self addAlbumWithTitle:@"Acid Fog Returns" artist:@"Josh and Chuck" summary:@"Listen to it Rocking." price:11.99f locationInStore:@"Section C"];
+ [self addAlbumWithTitle:@"Now You Call Music" artist:@"Various Artists" summary:@"Listen to this album." price:20.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Now You Call Music 2" artist:@"Various Artists" summary:@"Listen to this album." price:11.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Now You Call Music 3" artist:@"Various Artists" summary:@"Listen to this album." price:11.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Blackstreet Boys Music" artist:@"Blackstreet Boys" summary:@"Listen to this album." price:11.99f locationInStore:@"Section C"];
+ [self addAlbumWithTitle:@"Westlife Music" artist:@"Westlife" summary:@"Listen to this album." price:11.99f locationInStore:@"Section C"];
 }
 
 - (void)addAlbumWithTitle:(NSString *)title artist:(NSString *)artist summary:(NSString *)summary price:(float)price locationInStore:(NSString *)locationInStore {

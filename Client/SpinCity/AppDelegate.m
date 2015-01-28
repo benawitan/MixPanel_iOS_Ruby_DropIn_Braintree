@@ -7,8 +7,75 @@
 
 #import "AppDelegate.h"
 #import "MasterViewController.h"
+#import "User.h"
+
+@interface AppDelegate()
+    @property (strong, nonatomic) Mixpanel *mixpanel;
+@end
 
 @implementation AppDelegate
+
+NSString *const MIXPANEL_TOKEN = @"cabf011d2ab022136defacce2c241a62";
+
+
+//bootstrap with sample user data
+- (void)initializeUsers {
+        
+        [self addUser:@"Bill" plan:@"Regular" customer_id:[NSNumber numberWithInteger:100000] email:@"cyonlineshopping@gmail.com" country:@"Singapore" gender:@"M" language:@"English" mobile:@"+6596272429"];
+    
+        [self addUser:@"Steve" plan:@"Silver" customer_id:[NSNumber numberWithInteger:200000] email:@"cyonlineshopping@gmail.com" country:@"United States" gender:@"M" language:@"English" mobile:@"+15309888892"];
+    
+        [self addUser:@"Elon" plan:@"Gold" customer_id:[NSNumber numberWithInteger:300000] email:@"cyonlineshopping@gmail.com" country:@"South Africa" gender:@"M" language:@"English" mobile:@"+6596272429"];
+    
+        [self addUser:@"Melissa" plan:@"Gold" customer_id:[NSNumber numberWithInteger:400000] email:@"cyonlineshopping@gmail.com" country:@"Japan" gender:@"F" language:@"Japanese" mobile:@"+6596272429"];
+    
+        [self addUser:@"Sheryl" plan:@"Platinum" customer_id:[NSNumber numberWithInteger:500000] email:@"cyonlineshopping@gmail.com" country:@"Taiwan" gender:@"F" language:@"Chinese" mobile:@"+6596272429"];
+    
+
+}
+    - (void)addUser:(NSString *)name plan:(NSString *)plan customer_id:(NSNumber *)customer_id email:(NSString *)email country:(NSString *)country gender:(NSString *)gender language:(NSString *)language mobile:(NSString *)mobile{
+    
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:self.managedObjectContext];
+        
+        user.name = name;
+        user.plan = plan;
+        user.customer_id = customer_id;
+        user.email = email;
+        user.country = country;
+        user.gender = gender;
+        user.language = language;
+        user.mobile =  mobile;
+        
+        
+        // Save the context.
+        NSError *error = nil;
+        if (![user.managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+        
+}
+
+- (User *)fetchRandomUser{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    [request setEntity:[NSEntityDescription entityForName:@"User"
+                                   inManagedObjectContext:self.managedObjectContext]];
+    
+    NSError *error = nil;
+    NSArray *fetchResults;
+    fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if (!fetchResults||!error) {
+        NSLog(@"Fetch results error %@", error);
+    }
+    
+    User *user = [fetchResults objectAtIndex:arc4random()%[fetchResults count]];
+
+    return user;
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -16,9 +83,26 @@
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
+    
     controller.managedObjectContext = self.managedObjectContext;
     [self deleteAllEntities:@"Album"];
+    [self deleteAllEntities:@"User"];
     [NSFetchedResultsController deleteCacheWithName:nil];
+    
+    //Add mixpanel tracker for opening app event
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    self.mixpanel = [Mixpanel sharedInstance];
+    [self.mixpanel track:@"App Opened"];
+
+    [self initializeUsers];
+    User *user = [self fetchRandomUser];
+    [self.mixpanel identify:[user.customer_id stringValue]];
+    [self.mixpanel.people set:@{@"Plan":user.plan,@"$name":user.name,@"$email":user.email,@"Country":user.country,@"Gender":user.gender,
+                                @"Language":user.language,@"$phone":user.mobile}];
+    NSLog(@"User Logged: %@",user.name);
+    //set data upload interval to 10 secs for demo. default is 60 secs
+    self.mixpanel.flushInterval = 10;
+    
     return YES;
 }
 							
@@ -26,6 +110,7 @@
 {
   // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
   // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [self.mixpanel track:@"App Session"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -42,6 +127,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
   // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self.mixpanel timeEvent:@"App Session"];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

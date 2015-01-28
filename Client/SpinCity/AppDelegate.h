@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "MixPanel.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

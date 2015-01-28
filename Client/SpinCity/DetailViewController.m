@@ -8,12 +8,14 @@
 #import "DetailViewController.h"
 #import <Braintree/Braintree.h>
 #import "AFNetworking.h"
+#import "Mixpanel.h"
 
 
 @interface DetailViewController () <BTDropInViewControllerDelegate>
 @property (nonatomic, strong)  Braintree  *braintree;
 @property (nonatomic, strong) NSString *clientToken;
 @property (nonatomic, strong) NSString *nonce;
+@property (strong, nonatomic) Mixpanel *mixpanel;
 - (void)configureView;
 @end
 
@@ -39,6 +41,12 @@
         self.artistLabel.text =[self.detailItem valueForKey:@"artist"];
         self.locationLabel.text = [self.detailItem valueForKey:@"locationInStore"];
         self.descriptionTextLabel.text = [self.detailItem valueForKey:@"summary"];
+        
+        //Add mixpanel tracker for opening app event
+        [Mixpanel sharedInstance];
+        self.mixpanel = [Mixpanel sharedInstance];
+        NSString *textforTrack = [NSString stringWithFormat:@"Detailed Item Opened: %@",self.detailItem.title];
+        [self.mixpanel track:textforTrack];
     }
 }
 
@@ -95,20 +103,31 @@
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropInViewController];
     [self presentViewController:navigationController animated:YES completion:nil];
+    
+    [self.mixpanel timeEvent:@"Make Payment"];
 }
 
 - (void)userDidCancelPayment {
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.mixpanel track:@"Make Payment"];
+    [self.mixpanel track:@"User Cancel Payment"];
 }
 
 - (void)dropInViewController:(__unused BTDropInViewController *)viewController didSucceedWithPaymentMethod:(BTPaymentMethod *)paymentMethod {
     self.nonce = paymentMethod.nonce;
     [self postNonceToServer:self.nonce]; // Send payment method nonce to your server
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.mixpanel track:@"Make Payment"];
+    [self.mixpanel track:@"Transaction Successful"];
+    [self.mixpanel.people trackCharge:@([self.detailItem.price doubleValue])];
 }
 
 - (void)dropInViewControllerDidCancel:(__unused BTDropInViewController *)viewController {
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self.mixpanel track:@"Make Payment"];
 }
 
 
