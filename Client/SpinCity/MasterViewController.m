@@ -9,7 +9,7 @@
 #import "DetailViewController.h"
 #import "Album.h"
 #import "AlbumTableViewCell.h"
-#import "MixPanel.h"
+#import "Mixpanel.h"
 
 @interface MasterViewController ()
     @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
@@ -69,7 +69,7 @@
     //Add mixpanel tracker for detailed item view and item view count
     [Mixpanel sharedInstance];
     self.mixpanel = [Mixpanel sharedInstance];
-        [self.mixpanel track:@"Main Menu Library Opened"];
+    [self.mixpanel track:@"Main Menu Library Opened"];
     
 }
 

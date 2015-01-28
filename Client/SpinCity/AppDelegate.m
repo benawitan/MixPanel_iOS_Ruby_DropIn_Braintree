@@ -73,9 +73,8 @@ NSString *const MIXPANEL_TOKEN = @"cabf011d2ab022136defacce2c241a62";
         NSLog(@"Fetch results error %@", error);
     }
     
-    User *user = [fetchResults objectAtIndex:arc4random()%[fetchResults count]];
+    return [fetchResults objectAtIndex:arc4random()%[fetchResults count]];
 
-    return user;
 }
 
 
@@ -97,11 +96,11 @@ NSString *const MIXPANEL_TOKEN = @"cabf011d2ab022136defacce2c241a62";
     
     //Bootstrap users and track a random user each time the app loads
     [self initializeUsers];
-    User *user = [self fetchRandomUser];
-    [self.mixpanel identify:[user.customer_id stringValue]];
-    [self.mixpanel.people set:@{@"Plan":user.plan,@"$name":user.name,@"$email":user.email,@"Country":user.country,@"Gender":user.gender,
-                                @"Language":user.language,@"$phone":user.mobile}];
-    NSLog(@"User Logged: %@",user.name);
+    self.user = [self fetchRandomUser];
+    [self.mixpanel identify:[self.user.customer_id stringValue]];
+    [self.mixpanel.people set:@{@"Plan":self.user.plan,@"$name":self.user.name,@"$email":self.user.email,@"Country":self.user.country,@"Gender":self.user.gender,
+                                @"Language":self.user.language,@"$phone":self.user.mobile}];
+    NSLog(@"User Logged: %@",self.user.name);
     //set data upload interval to 10 secs for demo. default is 60 secs
     self.mixpanel.flushInterval = 10;
     

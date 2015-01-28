@@ -9,13 +9,14 @@
 #import <Braintree/Braintree.h>
 #import "AFNetworking.h"
 #import "Mixpanel.h"
-
+#import "AppDelegate.h"
 
 @interface DetailViewController () <BTDropInViewControllerDelegate>
 @property (nonatomic, strong)  Braintree  *braintree;
 @property (nonatomic, strong) NSString *clientToken;
 @property (nonatomic, strong) NSString *nonce;
 @property (strong, nonatomic) Mixpanel *mixpanel;
+@property (strong, nonatomic) User *user;
 - (void)configureView;
 @end
 
@@ -58,12 +59,16 @@
   [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
   [self configureView];
-  
-   if (!self.braintree){
 
+    AppDelegate *appdelegate = (AppDelegate*) [UIApplication sharedApplication].delegate;
+    self.user = appdelegate.user;
+    NSLog(@"UserID: %@", [self.user.customer_id stringValue]);
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
     [manager GET:@"http://localhost:4567/client_token"
-      parameters:NULL
+      //specify customer_id only when customer exists in Braintree vault
+      parameters:@{@"customer_id":[self.user.customer_id stringValue]}
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
              // Setup braintree with responseObject[@"client_token"]
              self.clientToken = responseObject[@"client_token"];
@@ -77,7 +82,6 @@
              NSLog(@"Client Token Failure");
 
          }];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -138,7 +142,7 @@
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:@"http://localhost:4567/simple_transaction"
-       parameters:@{@"payment_method_nonce": self.nonce,@"price": [self.detailItem valueForKey:@"price"], @"customer_id":[[NSUUID UUID] UUIDString]}
+       parameters:@{@"payment_method_nonce": self.nonce,@"price": [self.detailItem valueForKey:@"price"], @"customer_id":[self.user.customer_id stringValue]}
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
              NSDictionary *jsonDict = (NSDictionary *) responseObject;
               if([jsonDict objectForKey:@"message"]){
