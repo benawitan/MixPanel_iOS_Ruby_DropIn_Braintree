@@ -42,11 +42,14 @@
         self.locationLabel.text = [self.detailItem valueForKey:@"locationInStore"];
         self.descriptionTextLabel.text = [self.detailItem valueForKey:@"summary"];
         
-        //Add mixpanel tracker for opening app event
+        //Add mixpanel tracker for detailed item view and item view count
         [Mixpanel sharedInstance];
         self.mixpanel = [Mixpanel sharedInstance];
         NSString *textforTrack = [NSString stringWithFormat:@"Detailed Item Opened: %@",self.detailItem.title];
+
         [self.mixpanel track:textforTrack];
+        [self.mixpanel track:@"Detailed Item Opened"];
+
     }
 }
 

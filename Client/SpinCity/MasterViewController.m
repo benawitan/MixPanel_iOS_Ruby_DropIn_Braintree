@@ -9,10 +9,12 @@
 #import "DetailViewController.h"
 #import "Album.h"
 #import "AlbumTableViewCell.h"
+#import "MixPanel.h"
 
 @interface MasterViewController ()
     @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
     @property (nonatomic, strong) Album *album;
+    @property (strong, nonatomic) Mixpanel *mixpanel;
 
 @end
 
@@ -64,6 +66,10 @@
 {
     [super viewDidLoad];
     [self initializeDefaultAlbums];
+    //Add mixpanel tracker for detailed item view and item view count
+    [Mixpanel sharedInstance];
+    self.mixpanel = [Mixpanel sharedInstance];
+        [self.mixpanel track:@"Main Menu Library Opened"];
     
 }
 

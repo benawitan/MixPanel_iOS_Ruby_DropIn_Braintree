@@ -58,6 +58,7 @@ NSString *const MIXPANEL_TOKEN = @"cabf011d2ab022136defacce2c241a62";
         
 }
 
+//fetch a random user from Core Data
 - (User *)fetchRandomUser{
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
@@ -93,7 +94,8 @@ NSString *const MIXPANEL_TOKEN = @"cabf011d2ab022136defacce2c241a62";
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     self.mixpanel = [Mixpanel sharedInstance];
     [self.mixpanel track:@"App Opened"];
-
+    
+    //Bootstrap users and track a random user each time the app loads
     [self initializeUsers];
     User *user = [self fetchRandomUser];
     [self.mixpanel identify:[user.customer_id stringValue]];
