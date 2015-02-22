@@ -37,6 +37,7 @@
 - (void)configureView{
     
     if (self.detailItem) {
+        
         self.albumTitleLabel.text = [self.detailItem valueForKey:@"title"];
         self.priceLabel.text = [NSString stringWithFormat:@"$%01.2f", [[self.detailItem valueForKey:@"price"] floatValue]];
         self.artistLabel.text =[self.detailItem valueForKey:@"artist"];
@@ -102,6 +103,10 @@
     // Create a BTDropInViewController
     BTDropInViewController *dropInViewController = [self.braintree dropInViewControllerWithDelegate:self];
     // This is where you might want to customize your Drop in. (See below.)
+    
+    dropInViewController.summaryTitle = [self.detailItem valueForKey:@"title"];
+    dropInViewController.summaryDescription = [self.detailItem valueForKey:@"summary"];
+    dropInViewController.displayAmount = [NSString stringWithFormat:@"$%01.2f", [[self.detailItem valueForKey:@"price"] floatValue]];
     
     // The way you present your BTDropInViewController instance is up to you.
     // In this example, we wrap it in a new, modally presented navigation controller:

@@ -27,12 +27,12 @@
  [self addAlbumWithTitle:@"Hairy Eyeball" artist:@"Cyclops" summary:@"A 20/20 retrospective on Classic Rock." price:14.99f locationInStore:@"Section Discount"];
  [self addAlbumWithTitle:@"Squish" artist:@"the Bugz" summary:@"Not your average fly by night band." price:8.99f locationInStore:@"Section A"];
  [self addAlbumWithTitle:@"Acid Fog" artist:@"Josh and Chuck" summary:@"You should know this stuff." price:11.99f locationInStore:@"Section B"];
- [self addAlbumWithTitle:@"Acid Fog Returns" artist:@"Josh and Chuck" summary:@"Listen to it Rocking." price:11.99f locationInStore:@"Section C"];
- [self addAlbumWithTitle:@"Now You Call Music" artist:@"Various Artists" summary:@"Listen to this album." price:20.99f locationInStore:@"Section D"];
- [self addAlbumWithTitle:@"Now You Call Music 2" artist:@"Various Artists" summary:@"Listen to this album." price:11.99f locationInStore:@"Section D"];
- [self addAlbumWithTitle:@"Now You Call Music 3" artist:@"Various Artists" summary:@"Listen to this album." price:11.99f locationInStore:@"Section D"];
- [self addAlbumWithTitle:@"Blackstreet Boys Music" artist:@"Blackstreet Boys" summary:@"Listen to this album." price:11.99f locationInStore:@"Section C"];
- [self addAlbumWithTitle:@"Westlife Music" artist:@"Westlife" summary:@"Listen to this album." price:11.99f locationInStore:@"Section C"];
+ [self addAlbumWithTitle:@"Acid Fog Returns" artist:@"Josh and Chuck" summary:@"Listen to it Rocking." price:12.99f locationInStore:@"Section C"];
+ [self addAlbumWithTitle:@"Now You Call Music" artist:@"Various Artists" summary:@"Listen to this album." price:27.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Now You Call Music 2" artist:@"Various Artists" summary:@"Listen to this album." price:12.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Now You Call Music 3" artist:@"Various Artists" summary:@"Listen to this album." price:13.99f locationInStore:@"Section D"];
+ [self addAlbumWithTitle:@"Blackstreet Boys Music" artist:@"Blackstreet Boys" summary:@"Listen to this album." price:18.99f locationInStore:@"Section C"];
+ [self addAlbumWithTitle:@"Westlife Music" artist:@"Westlife" summary:@"Listen to this album." price:16.99f locationInStore:@"Section C"];
 }
 
 - (void)addAlbumWithTitle:(NSString *)title artist:(NSString *)artist summary:(NSString *)summary price:(float)price locationInStore:(NSString *)locationInStore {
